@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
+# Pedro Tome <Pedro.Tome@idiap.ch>
 # Laurent El Shafey <Laurent.El-Shafey@idiap.ch>
 #
 # Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
@@ -43,8 +44,8 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
 
   def groups(self, protocol=None):
     """Returns the names of all registered groups"""
-
-    return File.group_choices
+    if protocol == '1vsall': return ('world', 'dev')
+    else: return ('world', 'dev', 'eval')
 
   def clients(self, protocol=None, groups=None):
     """Returns a set of clients for the specific query by the user.
@@ -52,23 +53,32 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     Keyword Parameters:
 
     protocol
-      One of the UTFVP protocols ('master', 'paper').
+      One of the UTFVP protocols ('1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing').
 
     groups
       ignored (The clients belong both to 'world' and 'dev')
 
     Returns: A list containing all the clients which have the given properties.
     """
-
+    
     protocols = self.check_parameters_for_validity(protocol, "protocol", self.protocol_names())
-
+    groups = self.check_parameters_for_validity(groups, "group", self.groups())    
+    
     retval = []
     # List of the clients
-    q = self.query(Client)
-    if len(protocols) == 1 and protocols[0] == 'master':
-      q = q.filter(not_(Client.id.in_(('19_1', '19_2', '19_3', '19_4', '19_5', '19_6'))))
-    q = q.order_by(Client.id)
-    retval += list(q)
+    if 'world' in groups:
+      q = self.query(Client).join((File, Client.files)).join((Protocol, File.protocols_train)).filter(Protocol.name.in_(protocols))
+      q = q.order_by(Client.id)
+      retval += list(q)
+
+    if 'dev' in groups or 'eval' in groups:
+      q = self.query(Client).join((Model, Client.models)).join((Protocol, Model.protocol)).filter(Protocol.name.in_(protocols))
+      q = q.filter(Model.sgroup.in_(groups))
+      q = q.order_by(Client.id)
+      retval += list(q)
+
+    if len(protocols) == len(self.protocols()):
+      retval = list(self.query(Client))
 
     return retval
 
@@ -78,10 +88,10 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     Keyword Parameters:
 
     protocol
-      One of the UTFVP protocols ('master', 'paper').
+      One of the UTFVP protocols ('1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing').
 
     groups
-      ignored (The clients belong both to 'world' and 'dev')
+      The clients belong to ('world', 'dev' and 'eval')
 
     Returns: A list containing all the clients which have the given properties.
     """
@@ -94,12 +104,11 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     Keyword Parameters:
 
     protocol
-      One of the UTFVP protocols ('master', 'paper').
+      One of the UTFVP protocols ('1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing').
 
     groups
-      Returns models from the 'dev' if None or 'dev' are given.
-      Nothing otherwise
-
+      Returns models from the 'dev' or 'eval.
+      
     Returns: A list containing all the models which have the given properties.
     """
 
@@ -107,12 +116,12 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     groups = self.check_parameters_for_validity(groups, "group", self.groups())
 
     retval = []
-    if 'dev' in groups:
+    if 'dev' in groups or 'eval' in groups:
       # List of the clients
-      q = self.query(Model).join((Protocol, Model.protocols)).filter(Protocol.name.in_(protocols))
-      q = q.order_by(Model.name)
+      q = self.query(Model).join((Protocol, Model.protocol)).filter(Protocol.name.in_(protocols))
+      q = q.filter(Model.sgroup.in_(groups)).order_by(Model.name)
       retval += list(q)
-
+    
     return retval
 
   def model_ids(self, protocol=None, groups=None):
@@ -121,10 +130,10 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     Keyword Parameters:
 
     protocol
-      Two possible protocols: 'paper' or 'master'
+      Eight possible protocols: '1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing'
 
     groups
-      The groups to which the subjects attached to the models belong ('dev')
+      The groups to which the subjects attached to the models belong ('world', dev', 'eval')
 
     Returns: A list containing all the models ids which have the given properties.
     """
@@ -152,8 +161,8 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
 
     Returns: The client_id attached to the given model_id
     """
- 
-    return self.query(Model).filter(Model.name==model_id).one().client_id
+
+    return self.query(Model).filter(Model.name==model_id).first().client_id
 
   def objects(self, protocol=None, purposes=None, model_ids=None, groups=None,
       classes=None, finger_ids=None, session_ids=None):
@@ -162,7 +171,7 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     Keyword Parameters:
 
     protocol
-      One of the UTFVP protocols ('master', 'paper').
+      One of the UTFVP protocols ('1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing').
 
     purposes
       The purposes required to be retrieved ('enrol', 'probe', 'train') or a tuple
@@ -176,7 +185,7 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
       the model_ids is performed.
 
     groups
-      One of the groups ('dev', 'world') or a tuple with several of them.
+      One of the groups ('world', dev', 'eval') or a tuple with several of them.
       If 'None' is given (this is the default), it is considered the same as a
       tuple with all possible values.
 
@@ -221,19 +230,23 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     # Now query the database
     retval = []
     if 'world' in groups:
-      q = self.query(File).join((ProtocolPurpose, File.protocolPurposes)).join(Protocol).\
-            filter(and_(Protocol.name.in_(protocols), ProtocolPurpose.sgroup == 'world'))
-      #filter(File.sgroup == 'world')
+      q = self.query(File).join((Protocol, File.protocols_train)).\
+            filter(Protocol.name.in_(protocols))
       if finger_ids:  q = q.filter(File.finger_id.in_(finger_ids))
       if session_ids: q = q.filter(File.session_id.in_(session_ids))
       q = q.order_by(File.client_id, File.finger_id, File.session_id)
       retval += list(q)
 
-    if 'dev' in groups:
+    
+    if 'dev' in groups or 'eval' in groups:
+      sgroups = []
+      if 'dev' in groups: sgroups.append('dev')
+      if 'eval' in groups: sgroups.append('eval')
       if 'enrol' in purposes:
-        q = self.query(File).join(Client).join((ProtocolPurpose, File.protocolPurposes)).join(Protocol).\
-              filter(and_(Protocol.name.in_(protocols), ProtocolPurpose.sgroup == 'dev', ProtocolPurpose.purpose == 'enrol'))
-        if model_ids:   q = q.join((Model, File.models)).filter(Model.name.in_(model_ids))
+        q = self.query(File).join(Client).join((Model, File.models_enroll)).join((Protocol, Model.protocol)).\
+              filter(and_(Protocol.name.in_(protocols), Model.sgroup.in_(sgroups)))
+        if model_ids:
+          q = q.filter(Model.name.in_(model_ids))
         if finger_ids:  q = q.filter(File.finger_id.in_(finger_ids))
         if session_ids: q = q.filter(File.session_id.in_(session_ids))
         q = q.order_by(File.client_id, File.finger_id, File.session_id)
@@ -241,22 +254,20 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
         
       if 'probe' in purposes:
         if 'client' in classes:
-          q = self.query(File).join(Client).join((ProtocolPurpose, File.protocolPurposes)).join(Protocol).\
-                filter(and_(Protocol.name.in_(protocols), ProtocolPurpose.sgroup == 'dev', ProtocolPurpose.purpose == 'probe'))
-          if len(model_ids) != 0: # Optimization using prior knowledge on the protocol to avoid long query in this case
-            q = q.join((Model, Protocol.models)).filter(and_(File.client_id == Model.client_id, File.id != Model.file_id))
-          if model_ids:   q = q.filter(Model.name.in_(model_ids))
+          q = self.query(File).join(Client).join((Model, File.models_probe)).join((Protocol, Model.protocol)).\
+                filter(and_(Protocol.name.in_(protocols), Model.sgroup.in_(sgroups), File.client_id == Model.client_id))
+          if model_ids:
+            q = q.filter(Model.name.in_(model_ids))
           if finger_ids:  q = q.filter(File.finger_id.in_(finger_ids))
           if session_ids: q = q.filter(File.session_id.in_(session_ids))
           q = q.order_by(File.client_id, File.finger_id, File.session_id)
           retval += list(q)
-       
+          
         if 'impostor' in classes:
-          q = self.query(File).join(Client).join((ProtocolPurpose, File.protocolPurposes)).join(Protocol).\
-                filter(and_(Protocol.name.in_(protocols), ProtocolPurpose.sgroup == 'dev', ProtocolPurpose.purpose == 'probe'))
-          if len(model_ids) != 0: # Optimization using prior knowledge on the protocol to avoid long query in this case
-            q = q.join((Model, Protocol.models)).filter(File.client_id != Model.client_id)
-          if model_ids:   q = q.filter(Model.name.in_(model_ids))
+          q = self.query(File).join(Client).join((Model, File.models_probe)).join((Protocol, Model.protocol)).\
+                filter(and_(Protocol.name.in_(protocols), Model.sgroup.in_(sgroups), File.client_id != Model.client_id))
+          if len(model_ids) != 0:
+            q = q.filter(Model.name.in_(model_ids))
           if finger_ids:  q = q.filter(File.finger_id.in_(finger_ids))
           if session_ids: q = q.filter(File.session_id.in_(session_ids))
           q = q.order_by(File.client_id, File.finger_id, File.session_id)
@@ -288,4 +299,6 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
     return self.query(Protocol).filter(Protocol.name==name).one()
 
   def purposes(self):
-    return ProtocolPurpose.purpose_choices
+    return ('train', 'enrol', 'probe')
+
+

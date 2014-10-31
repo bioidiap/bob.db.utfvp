@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
+# Pedro Tome <Pedro.Tome@idiap.ch>
 # Laurent El Shafey <laurent.el-shafey@idiap.ch>
-# Wed Feb 19 12:31:20 CET 2014
 #
 # Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
 #
@@ -31,10 +31,14 @@ def dumplist(args):
   from .query import Database
   db = Database()
 
+  model_ids = None
+  if args.models is not None:
+    if isinstance(args.models, (list, tuple)): model_ids = args.models
+    else: model_ids = (args.models,)
   r = db.objects(
       protocol=args.protocol,
       purposes=args.purpose,
-      model_ids=(args.models,),
+      model_ids=model_ids,
       groups=args.group,
       classes=args.sclass
   )
