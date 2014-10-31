@@ -31,23 +31,27 @@ class UTFVPDatabaseTest(unittest.TestCase):
     db = xbob.db.utfvp.Database()
 
     self.assertEqual(len(db.groups()), 2)
-    self.assertEqual(len(db.protocols()), 2)
-    self.assertEqual(len(db.protocol_names()), 2)
+    self.assertEqual(len(db.protocols()), 3)
+    self.assertEqual(len(db.protocol_names()), 3)
     self.assertEqual(len(db.purposes()), 3)
 
     self.assertEqual(len(db.clients()), 360)
     self.assertEqual(len(db.clients(protocol='master')), 354)
     self.assertEqual(len(db.clients(protocol='paper')), 360)
+    self.assertEqual(len(db.clients(protocol='B')), 360)
     self.assertEqual(len(db.client_ids()), 360)
     self.assertEqual(len(db.client_ids(protocol='master')), 354)
     self.assertEqual(len(db.client_ids(protocol='paper')), 360)
+    self.assertEqual(len(db.client_ids(protocol='B')), 360)
 
     self.assertEqual(len(db.models()), 1300)
     self.assertEqual(len(db.models(protocol='master')), 1276)
     self.assertEqual(len(db.models(protocol='paper')), 1300)
+    self.assertEqual(len(db.models(protocol='B')), 216)
     self.assertEqual(len(db.model_ids()), 1300)
     self.assertEqual(len(db.model_ids(protocol='master')), 1276)
     self.assertEqual(len(db.model_ids(protocol='paper')), 1300)
+    self.assertEqual(len(db.model_ids(protocol='B')), 216)
 
 
   def test02_objects(self):
@@ -66,6 +70,10 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='paper', groups='world')), 140)
     self.assertEqual(len(db.objects(protocol='paper', groups='dev')), 1300)
 
+    self.assertEqual(len(db.objects(protocol='B')), 240)
+    self.assertEqual(len(db.objects(protocol='B', groups='world')), 24)
+    self.assertEqual(len(db.objects(protocol='B', groups='dev')), 216)
+
     self.assertEqual(len(db.objects(protocol='master', groups='dev', model_ids=('1_2_3',))), 1276)
     self.assertEqual(len(db.objects(protocol='master', groups='dev', model_ids=('1_2_3',), purposes='enrol')), 1)
     self.assertEqual(len(db.objects(protocol='master', groups='dev', model_ids=('1_2_3',), purposes='probe')), 1275)
@@ -78,6 +86,12 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='paper', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='client')), 3)
     self.assertEqual(len(db.objects(protocol='paper', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='impostor')), 1296)
 
+    self.assertEqual(len(db.objects(protocol='B', groups='dev', model_ids=('1_3_1',))), 216)
+    self.assertEqual(len(db.objects(protocol='B', groups='dev', model_ids=('1_3_1',), purposes='enrol')), 1)
+    self.assertEqual(len(db.objects(protocol='B', groups='dev', model_ids=('1_3_1',), purposes='probe')), 215)
+    self.assertEqual(len(db.objects(protocol='B', groups='dev', model_ids=('1_3_1',), purposes='probe', classes='client')), 1)
+    self.assertEqual(len(db.objects(protocol='B', groups='dev', model_ids=('1_3_1',), purposes='probe', classes='impostor')), 214)
+
   def test03_driver_api(self):
 
     from bob.db.script.dbmanage import main
@@ -86,4 +100,3 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(main('utfvp checkfiles --self-test'.split()), 0)
     self.assertEqual(main('utfvp reverse 0001/0001_1_1_120509-135315 --self-test'.split()), 0)
     self.assertEqual(main('utfvp path 37 --self-test'.split()), 0)
-

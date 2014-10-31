@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 # Laurent El Shafey <Laurent.El-Shafey@idiap.ch>
-# Wed Feb 19 10:53:53 CET 2014
 #
 # Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
 #
@@ -90,7 +89,7 @@ def add_files(session, imagedir, verbose):
 def add_protocols(session, client_dict, model_dict, file_dict, verbose):
   """Adds protocols"""
   # 2. ADDITIONS TO THE SQL DATABASE
-  protocol_list = ['master', 'paper']
+  protocol_list = ['master', 'paper', 'B']
   protocolPurpose_list = [('world', 'train'), ('dev', 'enrol'), ('dev', 'probe')]
   for proto in protocol_list:
     p = Protocol(proto)
@@ -111,11 +110,15 @@ def add_protocols(session, client_dict, model_dict, file_dict, verbose):
       for f_id, f_file in cfile_dict.iteritems():
         if f_file.client.subclient_id == 19 and proto == 'master':
           continue
+        if not ((f_file.finger_id == 3 or f_file.finger_id == 4) and (f_file.session_id == 1 or f_file.session_id == 2)) and proto == 'B':
+          continue
         if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, purpose[0], purpose[1]))
         pu.files.append(f_file)
     
     for m_id, model in model_dict.iteritems():
       if model.client.subclient_id == 19 and proto == 'master':
+        continue
+      if not ((model.file.finger_id == 3 or model.file.finger_id == 4) and (model.file.session_id == 1 or model.file.session_id == 2)) and proto == 'B':
         continue
       p.models.append(model)
 

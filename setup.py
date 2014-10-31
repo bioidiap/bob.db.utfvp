@@ -23,7 +23,7 @@ from setuptools import setup, find_packages
 setup(
 
     name='xbob.db.utfvp',
-    version='1.0.0',
+    version='1.1.0',
     description='UTFVP Database Access API for Bob',
     url='https://pypi.python.org/pypi/xbob.db.utfvp',
     license='GPLv3',
