@@ -27,8 +27,8 @@ setup(
     description='UTFVP Database Access API for Bob',
     url='https://pypi.python.org/pypi/xbob.db.utfvp',
     license='GPLv3',
-    author='',
-    author_email='',
+    author='Pedro Tome',
+    author_email='pedro.tome@idiap.ch',
     keywords='vein recognition, bob, xbob, xbob.db, UTFVP',
     long_description=open('README.rst').read(),
 
@@ -62,7 +62,7 @@ setup(
       },
 
     classifiers = [
-      'Development Status :: 3 - Beta',
+      'Development Status :: 4 - Beta',
       'Environment :: Console',
       'Intended Audience :: Developers',
       'Intended Audience :: Education',
