@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
+# Pedro Tome <Pedro.Tome@idiap.ch>
 # Laurent El Shafey <laurent.el-shafey@idiap.ch>
 #
 # Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
@@ -20,6 +21,6 @@
 """
 
 from .query import Database
-from .models import Client, File, Protocol, Model, ProtocolPurpose
+from .models import Client, File, Protocol, Model
 
 __all__ = dir()
