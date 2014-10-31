@@ -25,7 +25,7 @@ setup(
     name='xbob.db.utfvp',
     version='2.0.0',
     description='UTFVP Database Access API for Bob',
-    url='https://pypi.python.org/pypi/xbob.db.utfvp',
+    url='https://github.com/bioidiap/xbob.db.utfvp.git',
     license='GPLv3',
     author='Pedro Tome',
     author_email='pedro.tome@idiap.ch',
