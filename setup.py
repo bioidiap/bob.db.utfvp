@@ -2,7 +2,7 @@
 # vim: set fileencoding=utf-8 :
 # Pedro Tome <Pedro.Tome@idiap.ch>
 #
-# Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
+# Copyright (C) 2014-2015 Idiap Research Institute, Martigny, Switzerland
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,18 +18,21 @@
 
 from setuptools import setup, find_packages
 
+# Define package version
+version = open("version.txt").read().rstrip()
+
 # The only thing we do in this file is to call the setup() function with all
 # parameters that define our package.
 setup(
 
-    name='xbob.db.utfvp',
-    version='2.0.0',
+    name='bob.db.utfvp',
+    version=version,
     description='UTFVP Database Access API for Bob',
-    url='https://github.com/bioidiap/xbob.db.utfvp.git',
+    url='https://github.com/bioidiap/bob.db.utfvp.git',
     license='GPLv3',
     author='Pedro Tome',
     author_email='pedro.tome@idiap.ch',
-    keywords='vein recognition, bob, xbob, xbob.db, UTFVP',
+    keywords='fingervein recognition, bob, bob.db, UTFVP',
     long_description=open('README.rst').read(),
 
     # This line is required for any distutils based packaging.
@@ -40,28 +43,30 @@ setup(
     install_requires=[
       'setuptools',
       'six',  # py2/3 compatibility library
-      'bob==1.2.2',  # base signal proc./machine learning library
-      'xbob.db.verification.utils>=1.0.0' # defines a set of utilities for face verification databases like this one.
+      'bob.io.base',
+      'bob.db.base',
+      'bob.db.verification.utils'
     ],
 
     namespace_packages = [
-      'xbob',
-      'xbob.db',
+      'bob',
+      'bob.db',
       ],
 
     entry_points = {
       # bob database declaration
       'bob.db': [
-        'utfvp = xbob.db.utfvp.driver:Interface',
+        'utfvp = bob.db.utfvp.driver:Interface',
         ],
 
       # bob unittest declaration
       'bob.test': [
-        'utfvp = xbob.db.utfvp.test:UTFVPDatabaseTest',
+        'utfvp = bob.db.utfvp.test:UTFVPDatabaseTest',
         ],
       },
 
     classifiers = [
+      'Framework :: Bob',
       'Development Status :: 4 - Beta',
       'Environment :: Console',
       'Intended Audience :: Developers',

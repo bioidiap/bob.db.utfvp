@@ -22,14 +22,15 @@
 
 import os, sys
 import unittest
-import xbob.db.utfvp
+import bob.db.base
+import bob.db.utfvp
 
 class UTFVPDatabaseTest(unittest.TestCase):
   """Performs various tests on the UTFVP database."""
 
   def test01_clients(self):
     # test whether the correct number of clients is returned
-    db = xbob.db.utfvp.Database()
+    db = bob.db.utfvp.Database()
     
     self.assertEqual(len(db.groups()), 3)
     self.assertEqual(len(db.protocols()), 8)
@@ -99,7 +100,7 @@ class UTFVPDatabaseTest(unittest.TestCase):
 
   def test02_objects(self):
     # tests if the right number of File objects is returned
-    db = xbob.db.utfvp.Database()
+    db = bob.db.utfvp.Database()
     
     # Protocol '1vsall'
     self.assertEqual(len(db.objects(protocol='1vsall')), 1440) #1440 - 60 users * 6 fingers * 4 acq
@@ -311,7 +312,7 @@ class UTFVPDatabaseTest(unittest.TestCase):
 
   def test03_driver_api(self):
 
-    from bob.db.script.dbmanage import main
+    from bob.db.base.script.dbmanage import main
     self.assertEqual(main('utfvp dumplist --self-test'.split()), 0)
     self.assertEqual(main('utfvp dumplist --protocol=1vsall --class=client --group=dev --purpose=enrol --model=1_2_3 --self-test'.split()), 0)
     self.assertEqual(main('utfvp checkfiles --self-test'.split()), 0)

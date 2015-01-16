@@ -21,13 +21,13 @@
 """
 
 import os, numpy
-import bob.db.utils
+import bob.db.base.utils
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, or_, and_, not_
-from bob.db.sqlalchemy_migration import Enum, relationship
+from bob.db.base.sqlalchemy_migration import Enum, relationship
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.declarative import declarative_base
 
-import xbob.db.verification.utils
+import bob.db.verification.utils
 
 Base = declarative_base()
 
@@ -95,7 +95,7 @@ class Model(Base):
   def __repr__(self):
     return "Model(%s, %s)" % (self.name, self.sgroup) 
 
-class File(Base, xbob.db.verification.utils.File):
+class File(Base, bob.db.verification.utils.File):
   """Generic file container"""
 
   __tablename__ = 'file'
@@ -116,7 +116,7 @@ class File(Base, xbob.db.verification.utils.File):
 
   def __init__(self, client_id, path, finger_id,  session_id):
     # call base class constructor
-    xbob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
+    bob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
     #self.sgroup = sgroup
     self.finger_id = finger_id
     self.session_id = session_id

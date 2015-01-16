@@ -23,15 +23,15 @@ UTFVP database in the most obvious ways.
 
 import os
 import six
-from bob.db import utils
+from bob.db.base import utils
 from .models import *
 from .driver import Interface
 
-import xbob.db.verification.utils
+import bob.db.verification.utils
 
 SQLITE_FILE = Interface().files()[0]
 
-class Database(xbob.db.verification.utils.SQLiteDatabase):
+class Database(bob.db.verification.utils.SQLiteDatabase):
   """The dataset class opens and maintains a connection opened to the Database.
 
   It provides many different ways to probe for the characteristics of the data
@@ -40,7 +40,7 @@ class Database(xbob.db.verification.utils.SQLiteDatabase):
 
   def __init__(self, original_directory = None, original_extension = None):
     # call base class constructors
-    xbob.db.verification.utils.SQLiteDatabase.__init__(self, SQLITE_FILE, File)
+    bob.db.verification.utils.SQLiteDatabase.__init__(self, SQLITE_FILE, File)
 
   def groups(self, protocol=None):
     """Returns the names of all registered groups"""
