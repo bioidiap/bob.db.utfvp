@@ -40,7 +40,7 @@ class Database(bob.db.verification.utils.SQLiteDatabase):
 
   def __init__(self, original_directory = None, original_extension = None):
     # call base class constructors
-    bob.db.verification.utils.SQLiteDatabase.__init__(self, SQLITE_FILE, File
+    bob.db.verification.utils.SQLiteDatabase.__init__(self, SQLITE_FILE, File,
       original_directory=original_directory, 
       original_extension=original_extension
     )
