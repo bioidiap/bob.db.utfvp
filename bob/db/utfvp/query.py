@@ -177,7 +177,7 @@ class Database(bob.db.verification.utils.SQLiteDatabase):
       One of the UTFVP protocols ('1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing').
 
     purposes
-      The purposes required to be retrieved ('enrol', 'probe', 'train') or a tuple
+      The purposes required to be retrieved ('enroll', 'probe', 'train') or a tuple
       with several of them. If 'None' is given (this is the default), it is
       considered the same as a tuple with all possible values. This field is
       ignored for the data from the "world" group.
@@ -245,7 +245,7 @@ class Database(bob.db.verification.utils.SQLiteDatabase):
       sgroups = []
       if 'dev' in groups: sgroups.append('dev')
       if 'eval' in groups: sgroups.append('eval')
-      if 'enrol' in purposes:
+      if 'enroll' in purposes:
         q = self.query(File).join(Client).join((Model, File.models_enroll)).join((Protocol, Model.protocol)).\
               filter(and_(Protocol.name.in_(protocols), Model.sgroup.in_(sgroups)))
         if model_ids:
@@ -302,6 +302,6 @@ class Database(bob.db.verification.utils.SQLiteDatabase):
     return self.query(Protocol).filter(Protocol.name==name).one()
 
   def purposes(self):
-    return ('train', 'enrol', 'probe')
+    return ('train', 'enroll', 'probe')
 
 

@@ -112,8 +112,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev')), 1300) #(1440-140)
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',))), 1300)
-    self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', purposes='enrol')), 1300)
-    self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='enrol')), 1)
+    self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', purposes='enroll')), 1300)
+    self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='enroll')), 1)
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe')), 1299)
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', purposes='probe', classes='impostor')), 1300)
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='client')), 3) # 4 acq - 1
@@ -131,8 +131,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nom', groups='dev')), 432) #18 users * 6 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nom', groups='dev', model_ids=('11_2',))), 218) #18 users * 6 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nom', groups='dev', purposes='enrol')), 216) #18 users * 6 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nom', groups='dev', model_ids=('11_2',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nom', groups='dev', purposes='enroll')), 216) #18 users * 6 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nom', groups='dev', model_ids=('11_2',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nom', groups='dev', model_ids=('11_2',), purposes='probe')), 216) #18 users * 6 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nom', groups='dev', model_ids=('11_2',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nom', groups='dev', model_ids=('11_2',), purposes='probe', classes='impostor')), 214) #384 - 2 
@@ -140,8 +140,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nom', groups='eval')), 768) #32 users * 6 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',))), 386) #32 users * 6 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nom', groups='eval', purposes='enrol')), 384) #18 users * 6 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',), purposes='enrol')), 2) 
+    self.assertEqual(len(db.objects(protocol='nom', groups='eval', purposes='enroll')), 384) #18 users * 6 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',), purposes='enroll')), 2) 
     self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',), purposes='probe')), 384) #18 users * 6 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',), purposes='probe', classes='impostor')), 382) #384 - 2 
@@ -158,8 +158,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev')), 72) #18 users * 1 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', model_ids=('11_1',))), 38) #18 users * 1 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', purposes='enrol')), 36) #18 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', model_ids=('11_1',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', purposes='enroll')), 36) #18 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', model_ids=('11_1',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', model_ids=('11_1',), purposes='probe')), 36) #18 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', model_ids=('11_1',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='dev', model_ids=('11_1',), purposes='probe', classes='impostor')), 34) #36 - 2 
@@ -167,8 +167,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval')), 128) #32 users * 1 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', model_ids=('30_1',))), 66) #32 users * 1 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', purposes='enrol')), 64) #32 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', model_ids=('30_1',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', purposes='enroll')), 64) #32 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', model_ids=('30_1',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', model_ids=('30_1',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', model_ids=('30_1',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftRing', groups='eval', model_ids=('30_1',), purposes='probe', classes='impostor')), 62) #64 - 2 
@@ -185,8 +185,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev')), 72) #18 users * 1 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', model_ids=('11_2',))), 38) #18 users * 1 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', purposes='enrol')), 36) #18 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', model_ids=('11_2',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', purposes='enroll')), 36) #18 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', model_ids=('11_2',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', model_ids=('11_2',), purposes='probe')), 36) #18 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', model_ids=('11_2',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='dev', model_ids=('11_2',), purposes='probe', classes='impostor')), 34) #36 - 2 
@@ -194,8 +194,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval')), 128) #32 users * 1 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', model_ids=('30_2',))), 66) #32 users * 1 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', purposes='enrol')), 64) #32 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', model_ids=('30_2',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', purposes='enroll')), 64) #32 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', model_ids=('30_2',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', model_ids=('30_2',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', model_ids=('30_2',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftMiddle', groups='eval', model_ids=('30_2',), purposes='probe', classes='impostor')), 62) #64 - 2 
@@ -212,8 +212,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev')), 72) #18 users * 1 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', model_ids=('11_3',))), 38) #18 users * 1 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', purposes='enrol')), 36) #18 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', model_ids=('11_3',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', purposes='enroll')), 36) #18 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', model_ids=('11_3',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', model_ids=('11_3',), purposes='probe')), 36) #18 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', model_ids=('11_3',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='dev', model_ids=('11_3',), purposes='probe', classes='impostor')), 34) #36 - 2 
@@ -221,8 +221,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval')), 128) #32 users * 1 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',))), 66) #32 users * 1 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', purposes='enrol')), 64) #32 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', purposes='enroll')), 64) #32 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',), purposes='probe', classes='impostor')), 62) #64 - 2 
@@ -239,8 +239,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev')), 72) #18 users * 1 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', model_ids=('11_4',))), 38) #18 users * 1 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', purposes='enrol')), 36) #18 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', model_ids=('11_4',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', purposes='enroll')), 36) #18 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', model_ids=('11_4',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', model_ids=('11_4',), purposes='probe')), 36) #18 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', model_ids=('11_4',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='dev', model_ids=('11_4',), purposes='probe', classes='impostor')), 34) #36 - 2 
@@ -248,8 +248,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval')), 128) #32 users * 1 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', model_ids=('30_4',))), 66) #32 users * 1 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', purposes='enrol')), 64) #32 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', model_ids=('30_4',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', purposes='enroll')), 64) #32 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', model_ids=('30_4',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', model_ids=('30_4',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', model_ids=('30_4',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightIndex', groups='eval', model_ids=('30_4',), purposes='probe', classes='impostor')), 62) #64 - 2 
@@ -266,8 +266,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev')), 72) #18 users * 1 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', model_ids=('11_5',))), 38) #18 users * 1 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', purposes='enrol')), 36) #18 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', model_ids=('11_5',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', purposes='enroll')), 36) #18 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', model_ids=('11_5',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', model_ids=('11_5',), purposes='probe')), 36) #18 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', model_ids=('11_5',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='dev', model_ids=('11_5',), purposes='probe', classes='impostor')), 34) #36 - 2 
@@ -275,8 +275,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval')), 128) #32 users * 1 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', model_ids=('30_5',))), 66) #32 users * 1 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', purposes='enrol')), 64) #32 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', model_ids=('30_5',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', purposes='enroll')), 64) #32 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', model_ids=('30_5',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', model_ids=('30_5',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', model_ids=('30_5',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightMiddle', groups='eval', model_ids=('30_5',), purposes='probe', classes='impostor')), 62) #64 - 2 
@@ -293,8 +293,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Dev group
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev')), 72) #18 users * 1 fingers * 4 acq
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', model_ids=('11_6',))), 38) #18 users * 1 fingers * 2 acq + 2
-    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', purposes='enrol')), 36) #18 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', model_ids=('11_6',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', purposes='enroll')), 36) #18 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', model_ids=('11_6',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', model_ids=('11_6',), purposes='probe')), 36) #18 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', model_ids=('11_6',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='dev', model_ids=('11_6',), purposes='probe', classes='impostor')), 34) #36 - 2 
@@ -302,8 +302,8 @@ class UTFVPDatabaseTest(unittest.TestCase):
     # Eval group
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval')), 128) #32 users * 1 fingers * 4 acq  
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',))), 66) #32 users * 1 fingers * 2 acq + 2  
-    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', purposes='enrol')), 64) #32 users * 1 fingers * 2 acq 
-    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='enrol')), 2)
+    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', purposes='enroll')), 64) #32 users * 1 fingers * 2 acq 
+    self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='enroll')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='probe', classes='impostor')), 62) #64 - 2 
@@ -314,7 +314,7 @@ class UTFVPDatabaseTest(unittest.TestCase):
 
     from bob.db.base.script.dbmanage import main
     self.assertEqual(main('utfvp dumplist --self-test'.split()), 0)
-    self.assertEqual(main('utfvp dumplist --protocol=1vsall --class=client --group=dev --purpose=enrol --model=1_2_3 --self-test'.split()), 0)
+    self.assertEqual(main('utfvp dumplist --protocol=1vsall --class=client --group=dev --purpose=enroll --model=1_2_3 --self-test'.split()), 0)
     self.assertEqual(main('utfvp checkfiles --self-test'.split()), 0)
     self.assertEqual(main('utfvp reverse 0001/0001_1_1_120509-135315 --self-test'.split()), 0)
     self.assertEqual(main('utfvp path 37 --self-test'.split()), 0)

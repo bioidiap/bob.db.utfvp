@@ -111,7 +111,7 @@ def add_protocols(session, file_list, verbose):
             model_dict[model_id] = model
           # Append enrollment file
           model_dict[model_id].enrollment_files.append(f_file)
-          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enrol'))
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
           session.flush()
           
         else:
@@ -162,7 +162,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10:
           p.train_files.append(f_file)
@@ -214,7 +214,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 1:
           p.train_files.append(f_file)
@@ -264,7 +264,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 2:
           p.train_files.append(f_file)
@@ -314,7 +314,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 3:
           p.train_files.append(f_file)
@@ -364,7 +364,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 4:
           p.train_files.append(f_file)
@@ -415,7 +415,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 5:
           p.train_files.append(f_file)
@@ -466,7 +466,7 @@ def add_protocols(session, file_list, verbose):
           # It is an enrollment file: append it
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
-            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enrol'))
+            if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
              
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 6:
           p.train_files.append(f_file)
