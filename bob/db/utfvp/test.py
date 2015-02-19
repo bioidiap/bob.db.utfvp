@@ -119,7 +119,6 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='client')), 3) # 4 acq - 1
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='impostor')), 1296) #1300 - 4 acq     
 
-
   def test022_objects(self):
     # tests if the right number of File objects is returned
     db = bob.db.utfvp.Database()
@@ -152,6 +151,10 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='nom', groups='eval', model_ids=('30_2',), purposes='probe', classes='impostor')), 382) #384 - 2 
     
 
+  def test023_objects(self):
+    # tests if the right number of File objects is returned
+    db = bob.db.utfvp.Database()
+        
     #####################################################
     # Protocol 'nomLeftRing'
     self.assertEqual(len(db.objects(protocol='nomLeftRing')), 240) #1440 - 60 subjects * 1 fingers * 4 acq
@@ -233,6 +236,10 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='nomLeftIndex', groups='eval', model_ids=('30_3',), purposes='probe', classes='impostor')), 62) #64 - 2 
 
 
+  def test024_objects(self):
+    # tests if the right number of File objects is returned
+    db = bob.db.utfvp.Database()
+    
     #####################################################
     # Protocol 'nomRightIndex'
     self.assertEqual(len(db.objects(protocol='nomRightIndex')), 240) #1440 - 60 subjects * 1 fingers * 4 acq
@@ -312,7 +319,6 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='probe')), 64) #32 users * 1 fingers * 2 acq 
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='probe', classes='client')), 2)
     self.assertEqual(len(db.objects(protocol='nomRightRing', groups='eval', model_ids=('30_6',), purposes='probe', classes='impostor')), 62) #64 - 2 
-
 
 
   def test03_driver_api(self):
