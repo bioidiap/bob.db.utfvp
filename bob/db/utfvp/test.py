@@ -98,7 +98,7 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.model_ids(protocol='nomRightRing', groups='eval')), 32)
 
 
-  def test02_objects(self):
+  def test021_objects(self):
     # tests if the right number of File objects is returned
     db = bob.db.utfvp.Database()
     
@@ -117,9 +117,14 @@ class UTFVPDatabaseTest(unittest.TestCase):
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe')), 1299)
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', purposes='probe', classes='impostor')), 1300)
     self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='client')), 3) # 4 acq - 1
-    self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='impostor')), 1296) #1300 - 4 acq   
-    
+    self.assertEqual(len(db.objects(protocol='1vsall', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='impostor')), 1296) #1300 - 4 acq     
 
+
+  def test022_objects(self):
+    # tests if the right number of File objects is returned
+    db = bob.db.utfvp.Database()
+    
+    
     #####################################################
     # Protocol 'nom'
     self.assertEqual(len(db.objects(protocol='nom')), 1440) #1440 - 60 subjects * 6 fingers * 4 acq
