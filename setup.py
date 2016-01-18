@@ -16,10 +16,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, dist
+dist.Distribution(dict(setup_requires=['bob.extension']))
+
+from bob.extension.utils import load_requirements
+install_requires = load_requirements()
 
 # Define package version
 version = open("version.txt").read().rstrip()
+
 
 # The only thing we do in this file is to call the setup() function with all
 # parameters that define our package.
@@ -28,7 +33,7 @@ setup(
     name='bob.db.utfvp',
     version=version,
     description='UTFVP Database Access API for Bob',
-    url='https://github.com/bioidiap/bob.db.utfvp.git',
+    url='https://github.com/bioidiap/bob.db.utfvp',
     license='GPLv3',
     author='Pedro Tome',
     author_email='pedro.tome@idiap.ch',
@@ -40,28 +45,11 @@ setup(
     include_package_data=True,
     zip_safe=False,
 
-    install_requires=[
-      'setuptools',
-      'six',  # py2/3 compatibility library
-      'bob.io.base',
-      'bob.db.base',
-      'bob.db.verification.utils'
-    ],
-
-    namespace_packages = [
-      'bob',
-      'bob.db',
-      ],
+    install_requires=install_requires,
 
     entry_points = {
-      # bob database declaration
       'bob.db': [
         'utfvp = bob.db.utfvp.driver:Interface',
-        ],
-
-      # bob unittest declaration
-      'bob.test': [
-        'utfvp = bob.db.utfvp.test:UTFVPDatabaseTest',
         ],
       },
 
