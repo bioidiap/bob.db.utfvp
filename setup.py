@@ -1,43 +1,25 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-# Pedro Tome <Pedro.Tome@idiap.ch>
-#
-# Copyright (C) 2014-2015 Idiap Research Institute, Martigny, Switzerland
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3 of the License.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-from setuptools import setup, find_packages, dist
+from setuptools import setup, dist
 dist.Distribution(dict(setup_requires=['bob.extension']))
 
-from bob.extension.utils import load_requirements
+from bob.extension.utils import load_requirements, find_packages
 install_requires = load_requirements()
 
-# Define package version
-version = open("version.txt").read().rstrip()
-
-
-# The only thing we do in this file is to call the setup() function with all
-# parameters that define our package.
 setup(
 
     name='bob.db.utfvp',
-    version=version,
-    description='UTFVP Database Access API for Bob',
-    url='https://github.com/bioidiap/bob.db.utfvp',
-    license='GPLv3',
-    author='Pedro Tome',
-    author_email='pedro.tome@idiap.ch',
+    version=open("version.txt").read().rstrip(),
+    description='VERA Fingervein Database Access API for Bob',
+    url='https://github.com/bioidiap/bob.db.vera',
+    license='BSD',
+
+    author='Andre Anjos,Pedro Tome',
+    author_email='andre.anjos@idiap.ch,pedro.tome@idiap.ch',
+
     keywords='fingervein recognition, bob, bob.db, UTFVP',
+
     long_description=open('README.rst').read(),
 
     # This line is required for any distutils based packaging.
@@ -48,6 +30,7 @@ setup(
     install_requires=install_requires,
 
     entry_points = {
+      # bob database declaration
       'bob.db': [
         'utfvp = bob.db.utfvp.driver:Interface',
         ],
@@ -60,7 +43,7 @@ setup(
       'Intended Audience :: Developers',
       'Intended Audience :: Education',
       'Intended Audience :: Science/Research',
-      'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+      'License :: OSI Approved :: BSD License',
       'Natural Language :: English',
       'Programming Language :: Python',
       'Programming Language :: Python :: 3',

@@ -1,6 +1,5 @@
 .. vim: set fileencoding=utf-8 :
-.. Pedro Tome <pedro.tome@idiap.ch>
-.. Tus Jan  13 19:35:05 CEST 2015
+.. Wed 03 Aug 2016 09:05:32 CEST
 
 .. image:: http://img.shields.io/badge/docs-stable-yellow.png
    :target: http://pythonhosted.org/bob.db.utfvp/index.html
@@ -20,26 +19,24 @@
    :target: http://www.sas.ewi.utwente.nl
 
 
-==============================================================================
+=============================================
  UTFVP Fingervein Database Interface for Bob
-==============================================================================
+=============================================
 
-This package contains an interface for the evaluation protocol of the `UTFVP Fingervein Database <http://www.sas.ewi.utwente.nl>`_.
-This package does not contain the original `UTFVP Fingervein <http://www.sas.ewi.utwente.nl>`_ data files, which need to be obtained through the links above.
+This package contains an interface for the evaluation protocols of the `UTFVP
+Fingervein Database`_. Notice this package does not contain the raw data files
+from this dataset, which need to be obtained through the link above.
 
 
 Installation
 ------------
-To install this package -- alone or together with other `Packages of Bob <https://github.com/idiap/bob/wiki/Packages>`_ -- please read the `Installation Instructions <https://github.com/idiap/bob/wiki/Installation>`_.
-For Bob_ to be able to work properly, some dependent packages are required to be installed.
-Please make sure that you have read the `Dependencies <https://github.com/idiap/bob/wiki/Dependencies>`_ for your operating system.
 
-Documentation
--------------
-For further documentation on this package, please read the `Stable Version <http://pythonhosted.org/bob.db.utfvp/index.html>`_ or the `Latest Version <https://www.idiap.ch/software/bob/docs/latest/bioidiap/bob.db.utfvp/master/index.html>`_ of the documentation.
-For a list of tutorials on this or the other packages ob Bob_, or information on submitting issues, asking questions and starting discussions, please visit its website.
+This package only contains database access functions so it is easy to
+programatically reproduce evaluation results obtained in papers. You normally
+don't install this package, unless you're modifying it. Instead, install one of
+our top-level frameworks for vein image processing, such as ``bob.bio.vein``.
 
+
+.. Write your references here:
 .. _bob: https://www.idiap.ch/software/bob
-
-
-
+.. _utfvp fingervein database: http://www.sas.ewi.utwente.nl
