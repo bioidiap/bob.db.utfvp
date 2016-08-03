@@ -28,6 +28,13 @@ Fingervein Database`_. Notice this package does not contain the raw data files
 from this dataset, which need to be obtained through the link above.
 
 
+About
+-----
+
+This package is currently developed at the `Biometrics group`_ at the `Idiap
+Research Institute`_.
+
+
 Installation
 ------------
 
@@ -40,3 +47,5 @@ our top-level frameworks for vein image processing, such as ``bob.bio.vein``.
 .. Write your references here:
 .. _bob: https://www.idiap.ch/software/bob
 .. _utfvp fingervein database: http://www.sas.ewi.utwente.nl
+.. _biometrics group: http://www.idiap.ch/scientific-research/research-groups/biometric-person-recognition
+.. _idiap research institute: http://www.idiap.ch
