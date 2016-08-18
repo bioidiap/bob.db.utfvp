@@ -1,21 +1,5 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-# Pedro Tome <Pedro.Tome@idiap.ch>
-# Laurent El Shafey <Laurent.El-Shafey@idiap.ch>
-#
-# Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3 of the License.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 """This script creates the UTFVP database in a single pass.
 """
@@ -60,7 +44,7 @@ def add_files(session, imagedir, verbose):
     session.refresh(cfile)
 
     return cfile
-  
+
   if verbose: print("Adding files...")
   subdir_list = list(filter(nodot, os.listdir(imagedir)))
   client_dict = {}
@@ -76,7 +60,7 @@ def add_files(session, imagedir, verbose):
 
 def add_protocols(session, file_list, verbose):
   """Adds protocols"""
-    
+
   # 2. ADDITIONS TO THE SQL DATABASE
   protocol_list = ['1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing']
   for proto in protocol_list:
@@ -86,14 +70,14 @@ def add_protocols(session, file_list, verbose):
     session.add(p)
     session.flush()
     session.refresh(p)
-    
+
     if proto == '1vsall':
       # Helper function
       def isWorldFile(f_file):
         return f_file.client.subclient_id <= 35 and f_file.finger_id == ((f_file.client.subclient_id-1) % 6) + 1
 
       model_dict = {}
-      for f_file in file_list:      
+      for f_file in file_list:
         if not isWorldFile(f_file):
           model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
@@ -113,28 +97,28 @@ def add_protocols(session, file_list, verbose):
           model_dict[model_id].enrollment_files.append(f_file)
           if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
           session.flush()
-          
+
         else:
           p.train_files.append(f_file)
           if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
-      
-      
+
+
     if proto == 'nom':
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -163,30 +147,30 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10:
           p.train_files.append(f_file)
-          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))   
+          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
-         
+
     if proto == 'nomLeftRing':
-         
+
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2 and f_file.finger_id == 1)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2 and f_file.finger_id == 1)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2 and f_file.finger_id == 1)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2 and f_file.finger_id == 1)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        #import ipdb; ipdb.set_trace()    
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        #import ipdb; ipdb.set_trace()
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -215,28 +199,28 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 1:
           p.train_files.append(f_file)
           if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
     if proto == 'nomLeftMiddle':
-         
+
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2 and f_file.finger_id == 2)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2 and f_file.finger_id == 2)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2 and f_file.finger_id == 2)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2 and f_file.finger_id == 2)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -265,28 +249,28 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 2:
           p.train_files.append(f_file)
           if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
     if proto == 'nomLeftIndex':
-         
+
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2 and f_file.finger_id == 3)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2 and f_file.finger_id == 3)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2 and f_file.finger_id == 3)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2 and f_file.finger_id == 3)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -315,28 +299,28 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 3:
           p.train_files.append(f_file)
-          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))   
+          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
     if proto == 'nomRightIndex':
-         
+
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2 and f_file.finger_id == 4)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2 and f_file.finger_id == 4)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2 and f_file.finger_id == 4)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2 and f_file.finger_id == 4)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -365,29 +349,29 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 4:
           p.train_files.append(f_file)
-          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))                
-             
+          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
+
 
     if proto == 'nomRightMiddle':
-         
+
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2 and f_file.finger_id == 5)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2 and f_file.finger_id == 5)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2 and f_file.finger_id == 5)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2 and f_file.finger_id == 5)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -416,29 +400,29 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 5:
           p.train_files.append(f_file)
-          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))       
+          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
 
     if proto == 'nomRightRing':
-         
+
       # Helper functions
       def isDevEnrollFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id <= 2 and f_file.finger_id == 6)
       def isDevProbeFile(f_file):
         return (f_file.client.subclient_id >= 11 and f_file.client.subclient_id <= 28 and f_file.session_id > 2 and f_file.finger_id == 6)
-                
+
       def isEvalEnrollFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id <= 2 and f_file.finger_id == 6)
       def isEvalProbeFile(f_file):
         return (f_file.client.subclient_id >= 29 and f_file.session_id > 2 and f_file.finger_id == 6)
-        
+
       model_dict = {}
       for f_file in file_list:
         model_id = f_file.client_id
-        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):          
+        if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
           if not model_id in model_dict:
             sgroup = 'dev' if isDevEnrollFile(f_file) else 'eval'
@@ -467,10 +451,10 @@ def add_protocols(session, file_list, verbose):
           if isDevEnrollFile(f_file) or isEvalEnrollFile(f_file):
             model_dict[model_id].enrollment_files.append(f_file)
             if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev' if isDevEnrollFile(f_file) else 'eval', 'enroll'))
-             
+
         elif f_file.client.subclient_id <= 10 and f_file.finger_id == 6:
           p.train_files.append(f_file)
-          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))        
+          if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
 
 def create_tables(args):

@@ -1,6 +1,5 @@
 .. vim: set fileencoding=utf-8 :
-.. @author: Pedro Tome <pedro.tome@idiap.ch>
-.. @date:   Tue Jan 13 19:42:18 CEST 2015
+.. Thu 18 Aug 2016 18:03:16 CEST
 
 .. _bob.db.utfvp:
 

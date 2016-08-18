@@ -1,33 +1,19 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
-# Pedro Tome <Pedro.Tome@idiap.ch>
-# Laurent El Shafey <laurent.el-shafey@idiap.ch>
-#
-# Copyright (C) 2014 Idiap Research Institute, Martigny, Switzerland
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3 of the License.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 """Table models and functionality for the UTFVP database.
 """
 
 import os, numpy
-import bob.db.base.utils
+
+import bob.io.base
+import bob.io.image
+import bob.db.base
+
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, or_, and_, not_
 from bob.db.base.sqlalchemy_migration import Enum, relationship
 from sqlalchemy.orm import backref
 from sqlalchemy.ext.declarative import declarative_base
-
-import bob.db.verification.utils
 
 Base = declarative_base()
 
@@ -42,11 +28,10 @@ protocol_trainfiles_association = Table('protocol_trainfiles_association', Base.
 model_probefile_association = Table('model_probefile_association', Base.metadata,
   Column('model_id', Integer, ForeignKey('model.id')),
   Column('file_id', Integer, ForeignKey('file.id')))
-  
+
 model_enrollmentfile_association = Table('model_enrollmentfile_association', Base.metadata,
   Column('model_id', Integer, ForeignKey('model.id')),
   Column('file_id', Integer, ForeignKey('file.id')))
-
 
 
 class Client(Base):
@@ -63,7 +48,8 @@ class Client(Base):
     self.subclient_id = subclient_id
 
   def __repr__(self):
-    return "Client(%s)" % (self.id,) 
+    return "Client(%s)" % (self.id,)
+
 
 class Model(Base):
   """Database models, marked by an integer identifier and the group they belong to"""
@@ -93,33 +79,63 @@ class Model(Base):
     self.sgroup = sgroup
 
   def __repr__(self):
-    return "Model(%s, %s)" % (self.name, self.sgroup) 
+    return "Model(%s, %s)" % (self.name, self.sgroup)
 
-class File(Base, bob.db.verification.utils.File):
+
+class File(Base, bob.db.base.File):
   """Generic file container"""
 
   __tablename__ = 'file'
 
   # Key identifier for the file
   id = Column(Integer, primary_key=True)
+
   # Key identifier of the client associated with this file
   client_id = Column(String(20), ForeignKey('client.id')) # for SQL
+
   # Unique path to this file inside the database
   path = Column(String(100), unique=True)
+
   # Identifier of the claimed client associated with this file
-  finger_id = Column(Integer) 
+  finger_id = Column(Integer)
+
   # Identifier of the session
   session_id = Column(Integer)
 
   # For Python: A direct link to the client object that this file belongs to
   client = relationship("Client", backref=backref("files", order_by=id))
 
+
   def __init__(self, client_id, path, finger_id,  session_id):
+
     # call base class constructor
-    bob.db.verification.utils.File.__init__(self, client_id = client_id, path = path)
+    bob.db.base.File.__init__(self, path = path)
+
     #self.sgroup = sgroup
     self.finger_id = finger_id
     self.session_id = session_id
+
+
+  def load(self, directory=None, extension='.png'):
+    """Loads the image for this file entry
+
+
+    Parameters:
+
+      directory (str): The path to the root of the database installation.  This
+        is the path leading to files named ``DDD-G`` where ``D``'s correspond
+        to digits and ``G`` to the client gender. For example ``032-M``.
+
+
+    Returns:
+
+      numpy.ndarray: A 2D array of unsigned integers corresponding to the input
+       image for this file in (y,x) notation (Bob-style).
+
+    """
+
+    return bob.io.base.load(self.make_path(directory, '.png'))
+
 
 class Protocol(Base):
   """UTFVP protocols"""
@@ -140,4 +156,3 @@ class Protocol(Base):
 
   def __repr__(self):
     return "Protocol('%s')" % (self.name,)
-

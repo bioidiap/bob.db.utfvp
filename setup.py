@@ -11,8 +11,8 @@ setup(
 
     name='bob.db.utfvp',
     version=open("version.txt").read().rstrip(),
-    description='VERA Fingervein Database Access API for Bob',
-    url='https://github.com/bioidiap/bob.db.vera',
+    description='UTFVP Fingervein Database Access API for Bob',
+    url='https://gitlab.idiap.ch/bob/bob.db.vera',
     license='BSD',
 
     author='Andre Anjos,Pedro Tome',

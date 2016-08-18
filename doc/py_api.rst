@@ -1,6 +1,5 @@
 .. vim: set fileencoding=utf-8 :
-.. Andre Anjos <andre.anjos@idiap.ch>
-.. Mon 13 Aug 2012 12:36:40 CEST
+.. Thu 18 Aug 2016 18:03:33 CEST
 
 ============
  Python API
