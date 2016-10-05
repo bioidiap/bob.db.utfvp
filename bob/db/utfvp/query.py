@@ -39,7 +39,7 @@ class Database(bob.db.base.SQLiteDatabase):
 
     Parameters:
 
-      protocol (str, Optional): One of the UTFVP protocols:
+      protocol (:py:class:`str`, optional): One of the UTFVP protocols:
 
         * ``1vsall``
         * ``nom``
@@ -50,8 +50,8 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightMiddle``
         * ``nomRightRing``
 
-      groups (str, Optional): ignored (The clients belong both to ``world`` and
-        ``dev``)
+      groups (:py:class:`str`, Optional): ignored (The clients belong both to
+        ``world`` and ``dev``)
 
 
     Returns
@@ -88,7 +88,7 @@ class Database(bob.db.base.SQLiteDatabase):
 
     Parameters:
 
-      protocol (str, Optional): One of the UTFVP protocols:
+      protocol (:py:class:`str`, optional): One of the UTFVP protocols:
 
         * ``1vsall``
         * ``nom``
@@ -99,7 +99,8 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightMiddle``
         * ``nomRightRing``
 
-      groups (str, Optional): Groups the clients belong to. Should be one of:
+      groups (:py:class:`str`, optional): Groups the clients belong to. Should
+        be one of:
 
         * ``world``
         * ``dev``
@@ -119,7 +120,7 @@ class Database(bob.db.base.SQLiteDatabase):
 
     Parameters:
 
-      protocol (str, Optional): One of the UTFVP protocols:
+      protocol (:py:class:`str`, optional): One of the UTFVP protocols:
 
         * ``1vsall``
         * ``nom``
@@ -130,7 +131,8 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightMiddle``
         * ``nomRightRing``
 
-      groups (str, Optional): Groups the clients belong to. Should be one of:
+      groups (:py:class:`str`, optional): Groups the clients belong to. Should
+        be one of:
 
         * ``dev``
         * ``eval``
@@ -161,7 +163,7 @@ class Database(bob.db.base.SQLiteDatabase):
 
     Parameters:
 
-      protocol (str, Optional): One of the UTFVP protocols:
+      protocol (:py:class:`str`, optional): One of the UTFVP protocols:
 
         * ``1vsall``
         * ``nom``
@@ -172,7 +174,8 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightMiddle``
         * ``nomRightRing``
 
-      groups (str, Optional): Groups the clients belong to. Should be one of:
+      groups (:py:class:`str`, optional): Groups the clients belong to. Should
+        be one of:
 
         * ``world``
         * ``dev``
@@ -224,7 +227,8 @@ class Database(bob.db.base.SQLiteDatabase):
 
     Parameters:
 
-      protocol (str, list, Optional): One or several of:
+      protocol (:py:class:`str`, :py:class:`list`, optional): One or several
+        of:
 
         * ``1vsall``
         * ``nom``
@@ -235,35 +239,36 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightMiddle``
         * ``nomRightRing``
 
-      purposes (str, list, Optional): One or several of:
+      purposes (:py:class:`str`, :py:class:`list`, optional): One or several
+        of:
 
         * ``train``
         * ``enroll``
         * ``probe``
 
-      model_ids (str, list, Optional): Only retrieves the files for the
-        provided list of model ids. If ``None`` is given (this is the default),
-        no filter over the model_ids is performed.
+      model_ids (:py:class:`str`, :py:class:`list`, optional): Only retrieves
+        the files for the provided list of model ids. If ``None`` is given
+        (this is the default), no filter over the model_ids is performed.
 
-      groups (str, list, Optional): Groups the clients belong to. Should be one
-        or several of:
+      groups (:py:class:`str`, :py:class:`list`, optional): Groups the clients
+        belong to. Should be one or several of:
 
         * ``world``
         * ``dev``
         * ``eval``
 
-      classes (str, list, Optional): The classes (types of accesses) to be
-        retrieved (``client`` or ``impostor``) or a tuple with several of them.
-        If ``None`` is given (this is the default), it is considered the same
-        as a tuple with all possible values.
+      classes (:py:class:`str`, :py:class:`list`, optional): The classes (types
+        of accesses) to be retrieved (``client`` or ``impostor``) or a tuple
+        with several of them.  If ``None`` is given (this is the default), it
+        is considered the same as a tuple with all possible values.
 
-      finger_ids (str, list, Optional): Only retrieves the files for the
-        provided list of finger ids.  If ``None`` is given (this is the
-        default), no filter over the finger_ids is performed.
+      finger_ids (:py:class:`str`, :py:class:`list`, optional): Only retrieves
+        the files for the provided list of finger ids.  If ``None`` is given
+        (this is the default), no filter over the finger_ids is performed.
 
-      session_ids (str, list, Optional): Only retrieves the files for the
-        provided list of session ids. If ``None`` is given (this is the
-        default), no filter over the session_ids is performed.
+      session_ids (:py:class:`str`, :py:class:`list`, optional): Only retrieves
+        the files for the provided list of session ids. If ``None`` is given
+        (this is the default), no filter over the session_ids is performed.
 
 
     Returns:

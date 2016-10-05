@@ -15,8 +15,10 @@ setup(
     url='https://gitlab.idiap.ch/bob/bob.db.vera',
     license='BSD',
 
-    author='Andre Anjos,Pedro Tome',
-    author_email='andre.anjos@idiap.ch,pedro.tome@idiap.ch',
+    author='Pedro Tome',
+    author_email='pedro.tome@idiap.ch',
+    maintainer='Andre Anjos',
+    maintainer_email='andre.anjos@idiap.ch',
 
     keywords='fingervein recognition, bob, bob.db, UTFVP',
 
