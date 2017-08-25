@@ -112,6 +112,7 @@ class File(Base, bob.db.base.File):
     bob.db.base.File.__init__(self, path = path)
 
     #self.sgroup = sgroup
+    self.client_id = client_id
     self.finger_id = finger_id
     self.session_id = session_id
 
