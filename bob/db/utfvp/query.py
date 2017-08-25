@@ -32,6 +32,8 @@ class Database(bob.db.base.SQLiteDatabase):
 
     if protocol == '1vsall':
       return ('world', 'dev')
+    elif protocol == 'full':
+      return('dev')
     else:
       return ('world', 'dev', 'eval')
 
@@ -51,6 +53,7 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
+	* ``full``
 
       groups (:py:class:`str`, Optional): ignored (The clients belong both to
         ``world`` and ``dev``)
@@ -102,6 +105,7 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
+	* ``full``
 
       groups (:py:class:`str`, optional): Groups the clients belong to. Should
         be one of:
@@ -133,6 +137,7 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
+	* ``full``
 
       groups (:py:class:`str`, optional): Groups the clients belong to. Should
         be one of:
@@ -177,6 +182,7 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
+	* ``full``
 
       groups (:py:class:`str`, optional): Groups the clients belong to. Should
         be one of:
@@ -238,6 +244,7 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
+	* ``full``
 
       purposes (:py:class:`str`, :py:class:`list`, optional): One or several
         of:
@@ -384,3 +391,4 @@ class Database(bob.db.base.SQLiteDatabase):
 
   def purposes(self):
     return ('train', 'enroll', 'probe')
+
