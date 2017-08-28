@@ -62,7 +62,7 @@ def add_protocols(session, file_list, verbose):
   """Adds protocols"""
 
   # 2. ADDITIONS TO THE SQL DATABASE
-  protocol_list = ['1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing']
+  protocol_list = ['1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing', 'full']
   for proto in protocol_list:
     p = Protocol(proto)
     # Add protocol
@@ -456,6 +456,28 @@ def add_protocols(session, file_list, verbose):
           p.train_files.append(f_file)
           if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
+
+    if proto == 'full': # calculate match score between every client (model) and every probe (no training/world set)
+      model_dict = {}
+      for f_file in file_list:
+        model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+        if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+        if not model_id in model_dict:
+          model = Model(model_id, f_file.client_id, 'dev')
+          p.models.append(model)
+          session.add(model)
+          session.flush()
+          session.refresh(model)
+          # Append probe files
+          for f_pfile in file_list:
+            if f_pfile.id != f_file.id:
+              model.probe_files.append(f_pfile)
+              if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+          model_dict[model_id] = model
+        # Append enrollment file
+        model_dict[model_id].enrollment_files.append(f_file)
+        if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+        session.flush()
 
 def create_tables(args):
   """Creates all necessary tables (only to be used at the first time)"""
