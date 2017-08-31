@@ -84,7 +84,7 @@ def test_clients():
   nose.tools.eq_(len(db.client_ids(protocol='nomRightRing')), 60)
   nose.tools.eq_(len(db.client_ids(protocol='full')), 360)
 
-  nose.tools.eq_(len(db.models()), 1900) #1300 + 300 + 50 * 6
+  nose.tools.eq_(len(db.models()), 3340) #1300 + 300 + 50 * 6 + 1440
   nose.tools.eq_(len(db.models(protocol='1vsall')), 1300) # (35 clients * 5 fingers per client * 4 samples per finger) + (25 clients * 6 fingers per client * 4 samples per finger)
   nose.tools.eq_(len(db.models(protocol='nom')), 300) # (1 model per finger * 6 fingers per client) * (18 "dev" clients + 32 "eval" clients)
   nose.tools.eq_(len(db.models(protocol='nomLeftRing')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
@@ -95,7 +95,7 @@ def test_clients():
   nose.tools.eq_(len(db.models(protocol='nomRightRing')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
   nose.tools.eq_(len(db.models(protocol='full')), 1440) # 60 clients * 6 fingers per client * 4 samples per finger
 
-  nose.tools.eq_(len(db.model_ids()), 1900) #1300 + 300 + 50 * 6
+  nose.tools.eq_(len(db.model_ids()), 3340) #1300 + 300 + 50 * 6 + 1440
   nose.tools.eq_(len(db.model_ids(protocol='1vsall')), 1300)
   nose.tools.eq_(len(db.model_ids(protocol='nom')), 300)
   nose.tools.eq_(len(db.model_ids(protocol='nom', groups='dev')), 108) #18 subjects *6 fingers
