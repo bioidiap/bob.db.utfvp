@@ -29,7 +29,7 @@ def sql3_available(test):
     if os.path.exists(dbfile):
       return test(*args, **kwargs)
     else:
-      raise SkipTest("The interface SQL file (%s) is not available; did you forget to run 'bob_dbmanage.py %s create' ?" % (dbfile, 'vera'))
+      raise SkipTest("The interface SQL file (%s) is not available; did you forget to run 'bob_dbmanage.py %s create' ?" % (dbfile, 'utfvp'))
 
   return wrapper
 
@@ -58,8 +58,8 @@ def test_clients():
   db = Database()
 
   nose.tools.eq_(len(db.groups()), 3)
-  nose.tools.eq_(len(db.protocols()), 8)
-  nose.tools.eq_(len(db.protocol_names()), 8)
+  nose.tools.eq_(len(db.protocols()), 9)
+  nose.tools.eq_(len(db.protocol_names()), 9)
   nose.tools.eq_(len(db.purposes()), 3)
 
   nose.tools.eq_(len(db.clients()), 360)
@@ -71,6 +71,7 @@ def test_clients():
   nose.tools.eq_(len(db.clients(protocol='nomRightIndex')), 60)
   nose.tools.eq_(len(db.clients(protocol='nomRightMiddle')), 60)
   nose.tools.eq_(len(db.clients(protocol='nomRightRing')), 60)
+  nose.tools.eq_(len(db.clients(protocol='full')), 360)
 
   nose.tools.eq_(len(db.client_ids()), 360)
   nose.tools.eq_(len(db.client_ids(protocol='1vsall')), 360)
@@ -81,18 +82,20 @@ def test_clients():
   nose.tools.eq_(len(db.client_ids(protocol='nomRightIndex')), 60)
   nose.tools.eq_(len(db.client_ids(protocol='nomRightMiddle')), 60)
   nose.tools.eq_(len(db.client_ids(protocol='nomRightRing')), 60)
+  nose.tools.eq_(len(db.client_ids(protocol='full')), 360)
 
-  nose.tools.eq_(len(db.models()), 1900) #1300 + 300 + 50 * 6
-  nose.tools.eq_(len(db.models(protocol='1vsall')), 1300)
-  nose.tools.eq_(len(db.models(protocol='nom')), 300)
-  nose.tools.eq_(len(db.models(protocol='nomLeftRing')), 50)
-  nose.tools.eq_(len(db.models(protocol='nomLeftMiddle')), 50)
-  nose.tools.eq_(len(db.models(protocol='nomLeftIndex')), 50)
-  nose.tools.eq_(len(db.models(protocol='nomRightIndex')), 50)
-  nose.tools.eq_(len(db.models(protocol='nomRightMiddle')), 50)
-  nose.tools.eq_(len(db.models(protocol='nomRightRing')), 50)
+  nose.tools.eq_(len(db.models()), 3340) #1300 + 300 + 50 * 6 + 1440
+  nose.tools.eq_(len(db.models(protocol='1vsall')), 1300) # (35 clients * 5 fingers per client * 4 samples per finger) + (25 clients * 6 fingers per client * 4 samples per finger)
+  nose.tools.eq_(len(db.models(protocol='nom')), 300) # (1 model per finger * 6 fingers per client) * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='nomLeftRing')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='nomLeftMiddle')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='nomLeftIndex')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='nomRightIndex')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='nomRightMiddle')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='nomRightRing')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
+  nose.tools.eq_(len(db.models(protocol='full')), 1440) # 60 clients * 6 fingers per client * 4 samples per finger
 
-  nose.tools.eq_(len(db.model_ids()), 1900) #1300 + 300 + 50 * 6
+  nose.tools.eq_(len(db.model_ids()), 3340) #1300 + 300 + 50 * 6 + 1440
   nose.tools.eq_(len(db.model_ids(protocol='1vsall')), 1300)
   nose.tools.eq_(len(db.model_ids(protocol='nom')), 300)
   nose.tools.eq_(len(db.model_ids(protocol='nom', groups='dev')), 108) #18 subjects *6 fingers
@@ -121,6 +124,8 @@ def test_clients():
   nose.tools.eq_(len(db.model_ids(protocol='nomRightRing')), 50)
   nose.tools.eq_(len(db.model_ids(protocol='nomRightRing', groups='dev')), 18)
   nose.tools.eq_(len(db.model_ids(protocol='nomRightRing', groups='eval')), 32)
+
+  nose.tools.eq_(len(db.model_ids(protocol='full')), 1440)
 
 
 @sql3_available
@@ -356,6 +361,26 @@ def test_objects_4():
 
 
 @sql3_available
+def test_objects_5():
+
+  # tests if the right number of File objects is returned
+  db = Database()
+
+  # Protocol 'full'
+  nose.tools.eq_(len(db.objects(protocol='full')), 1440) # 60 clients * 6 fingers per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev')), 1440) 
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',))), 1440)
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', purposes='enroll')), 1440)
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',), purposes='probe')), 1439)
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', purposes='probe', classes='impostor')), 1440)
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='impostor')), 1436) # 1440 total samples - 4 genuine samples
+
+
+@sql3_available
 def test_driver_api():
 
   from bob.db.base.script.dbmanage import main
@@ -378,3 +403,4 @@ def test_load():
     assert isinstance(image, numpy.ndarray)
     nose.tools.eq_(len(image.shape), 2) #it is a 2D array
     nose.tools.eq_(image.dtype, numpy.uint8)
+
