@@ -58,8 +58,8 @@ def test_clients():
   db = Database()
 
   nose.tools.eq_(len(db.groups()), 3)
-  nose.tools.eq_(len(db.protocols()), 9)
-  nose.tools.eq_(len(db.protocol_names()), 9)
+  nose.tools.eq_(len(db.protocols()), 15)
+  nose.tools.eq_(len(db.protocol_names()), 15)
   nose.tools.eq_(len(db.purposes()), 3)
 
   nose.tools.eq_(len(db.clients()), 360)
@@ -72,6 +72,12 @@ def test_clients():
   nose.tools.eq_(len(db.clients(protocol='nomRightMiddle')), 60)
   nose.tools.eq_(len(db.clients(protocol='nomRightRing')), 60)
   nose.tools.eq_(len(db.clients(protocol='full')), 360)
+  nose.tools.eq_(len(db.clients(protocol='fullLeftRing')), 60)
+  nose.tools.eq_(len(db.clients(protocol='fullLeftMiddle')), 60)
+  nose.tools.eq_(len(db.clients(protocol='fullLeftIndex')), 60)
+  nose.tools.eq_(len(db.clients(protocol='fullRightIndex')), 60)
+  nose.tools.eq_(len(db.clients(protocol='fullRightMiddle')), 60)
+  nose.tools.eq_(len(db.clients(protocol='fullRightRing')), 60)
 
   nose.tools.eq_(len(db.client_ids()), 360)
   nose.tools.eq_(len(db.client_ids(protocol='1vsall')), 360)
@@ -83,8 +89,14 @@ def test_clients():
   nose.tools.eq_(len(db.client_ids(protocol='nomRightMiddle')), 60)
   nose.tools.eq_(len(db.client_ids(protocol='nomRightRing')), 60)
   nose.tools.eq_(len(db.client_ids(protocol='full')), 360)
+  nose.tools.eq_(len(db.client_ids(protocol='fullLeftRing')), 60)
+  nose.tools.eq_(len(db.client_ids(protocol='fullLeftMiddle')), 60)
+  nose.tools.eq_(len(db.client_ids(protocol='fullLeftIndex')), 60)
+  nose.tools.eq_(len(db.client_ids(protocol='fullRightIndex')), 60)
+  nose.tools.eq_(len(db.client_ids(protocol='fullRightMiddle')), 60)
+  nose.tools.eq_(len(db.client_ids(protocol='fullRightRing')), 60)
 
-  nose.tools.eq_(len(db.models()), 3340) #1300 + 300 + 50 * 6 + 1440
+  nose.tools.eq_(len(db.models()), 4780) #1300 + 300 + 50 * 6 + 1440 + 240 * 6
   nose.tools.eq_(len(db.models(protocol='1vsall')), 1300) # (35 clients * 5 fingers per client * 4 samples per finger) + (25 clients * 6 fingers per client * 4 samples per finger)
   nose.tools.eq_(len(db.models(protocol='nom')), 300) # (1 model per finger * 6 fingers per client) * (18 "dev" clients + 32 "eval" clients)
   nose.tools.eq_(len(db.models(protocol='nomLeftRing')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
@@ -94,8 +106,14 @@ def test_clients():
   nose.tools.eq_(len(db.models(protocol='nomRightMiddle')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
   nose.tools.eq_(len(db.models(protocol='nomRightRing')), 50) # 1 model per client * (18 "dev" clients + 32 "eval" clients)
   nose.tools.eq_(len(db.models(protocol='full')), 1440) # 60 clients * 6 fingers per client * 4 samples per finger
+  nose.tools.eq_(len(db.models(protocol='fullLeftRing')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.models(protocol='fullLeftMiddle')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.models(protocol='fullLeftIndex')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.models(protocol='fullRightIndex')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.models(protocol='fullRightMiddle')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.models(protocol='fullRightRing')), 240) # 60 clients * 1 finger per client * 4 samples per finger
 
-  nose.tools.eq_(len(db.model_ids()), 3340) #1300 + 300 + 50 * 6 + 1440
+  nose.tools.eq_(len(db.model_ids()), 4780) #1300 + 300 + 50 * 6 + 1440 + 240 * 6
   nose.tools.eq_(len(db.model_ids(protocol='1vsall')), 1300)
   nose.tools.eq_(len(db.model_ids(protocol='nom')), 300)
   nose.tools.eq_(len(db.model_ids(protocol='nom', groups='dev')), 108) #18 subjects *6 fingers
@@ -126,6 +144,13 @@ def test_clients():
   nose.tools.eq_(len(db.model_ids(protocol='nomRightRing', groups='eval')), 32)
 
   nose.tools.eq_(len(db.model_ids(protocol='full')), 1440)
+
+  nose.tools.eq_(len(db.model_ids(protocol='fullLeftRing')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.model_ids(protocol='fullLeftMiddle')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.model_ids(protocol='fullLeftIndex')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.model_ids(protocol='fullRightIndex')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.model_ids(protocol='fullRightMiddle')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+  nose.tools.eq_(len(db.model_ids(protocol='fullRightRing')), 240) # 60 clients * 1 finger per client * 4 samples per finger
 
 
 @sql3_available
@@ -378,6 +403,108 @@ def test_objects_5():
   nose.tools.eq_(len(db.objects(protocol='full', groups='dev', purposes='probe', classes='impostor')), 1440)
   nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
   nose.tools.eq_(len(db.objects(protocol='full', groups='dev', model_ids=('1_2_3',), purposes='probe', classes='impostor')), 1436) # 1440 total samples - 4 genuine samples
+
+
+@sql3_available
+def test_objects_6():
+
+  # tests if the right number of File objects is returned
+  db = Database()
+
+  #####################################################
+  # Protocol 'fullLeftRing'
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev')), 240) 
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', model_ids=('1_1_1',))), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', purposes='enroll')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', model_ids=('1_1_1',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', model_ids=('1_1_1',), purposes='probe')), 239)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', purposes='probe', classes='impostor')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', model_ids=('1_1_1',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='fullLeftRing', groups='dev', model_ids=('1_1_1',), purposes='probe', classes='impostor')), 236) # 240 total samples - 4 genuine samples
+
+
+  #####################################################
+  # Protocol 'fullLeftMiddle'
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev')), 240) 
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', model_ids=('1_2_1',))), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', purposes='enroll')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', model_ids=('1_2_1',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', model_ids=('1_2_1',), purposes='probe')), 239)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', purposes='probe', classes='impostor')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', model_ids=('1_2_1',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='fullLeftMiddle', groups='dev', model_ids=('1_2_1',), purposes='probe', classes='impostor')), 236) # 240 total samples - 4 genuine samples
+
+
+  #####################################################
+  # Protocol 'fullLeftIndex'
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev')), 240) 
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', model_ids=('1_3_1',))), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', purposes='enroll')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', model_ids=('1_3_1',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', model_ids=('1_3_1',), purposes='probe')), 239)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', purposes='probe', classes='impostor')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', model_ids=('1_3_1',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='fullLeftIndex', groups='dev', model_ids=('1_3_1',), purposes='probe', classes='impostor')), 236) # 240 total samples - 4 genuine samples
+
+
+@sql3_available
+def test_objects_7():
+
+  # tests if the right number of File objects is returned
+  db = Database()
+
+  #####################################################
+  # Protocol 'fullRightIndex'
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev')), 240) 
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', model_ids=('1_4_1',))), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', purposes='enroll')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', model_ids=('1_4_1',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', model_ids=('1_4_1',), purposes='probe')), 239)
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', purposes='probe', classes='impostor')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', model_ids=('1_4_1',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='fullRightIndex', groups='dev', model_ids=('1_4_1',), purposes='probe', classes='impostor')), 236) # 240 total samples - 4 genuine samples
+
+
+  #####################################################
+  # Protocol 'fullRightMiddle'
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev')), 240) 
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', model_ids=('1_5_1',))), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', purposes='enroll')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', model_ids=('1_5_1',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', model_ids=('1_5_1',), purposes='probe')), 239)
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', purposes='probe', classes='impostor')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', model_ids=('1_5_1',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='fullRightMiddle', groups='dev', model_ids=('1_5_1',), purposes='probe', classes='impostor')), 236) # 240 total samples - 4 genuine samples
+
+
+  #####################################################
+  # Protocol 'fullRightRing'
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing')), 240) # 60 clients * 1 finger per client * 4 samples per finger
+
+  # Dev group
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev')), 240) 
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', model_ids=('1_6_1',))), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', purposes='enroll')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', model_ids=('1_6_1',), purposes='enroll')), 1)
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', model_ids=('1_6_1',), purposes='probe')), 239)
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', purposes='probe', classes='impostor')), 240)
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', model_ids=('1_6_1',), purposes='probe', classes='client')), 3) # 3 genuine comparisons per sample
+  nose.tools.eq_(len(db.objects(protocol='fullRightRing', groups='dev', model_ids=('1_6_1',), purposes='probe', classes='impostor')), 236) # 240 total samples - 4 genuine samples
 
 
 @sql3_available
