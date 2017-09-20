@@ -32,7 +32,7 @@ class Database(bob.db.base.SQLiteDatabase):
 
     if protocol == '1vsall':
       return ('world', 'dev')
-    elif protocol == 'full':
+    elif protocol == 'full' or protocol == 'fullLeftRing' or protocol == 'fullLeftMiddle' or protocol == 'fullLeftIndex' or protocol == 'fullRightIndex' or protocol == 'fullRightMiddle' or protocol == 'fullRightRing':
       return('dev')
     else:
       return ('world', 'dev', 'eval')
@@ -53,7 +53,13 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
-	* ``full``
+	      * ``full``
+        * ``fullLeftRing``
+        * ``fullLeftMiddle``
+        * ``fullLeftIndex``
+        * ``fullRightIndex``
+        * ``fullRightMiddle``
+        * ``fullRightRing``
 
       groups (:py:class:`str`, Optional): ignored (The clients belong both to
         ``world`` and ``dev``)
@@ -105,7 +111,13 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
-	* ``full``
+	      * ``full``
+        * ``fullLeftRing``
+        * ``fullLeftMiddle``
+        * ``fullLeftIndex``
+        * ``fullRightIndex``
+        * ``fullRightMiddle``
+        * ``fullRightRing``
 
       groups (:py:class:`str`, optional): Groups the clients belong to. Should
         be one of:
@@ -137,7 +149,13 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
-	* ``full``
+	      * ``full``
+        * ``fullLeftRing``
+        * ``fullLeftMiddle``
+        * ``fullLeftIndex``
+        * ``fullRightIndex``
+        * ``fullRightMiddle``
+        * ``fullRightRing``
 
       groups (:py:class:`str`, optional): Groups the clients belong to. Should
         be one of:
@@ -182,7 +200,13 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
-	* ``full``
+	      * ``full``
+        * ``fullLeftRing``
+        * ``fullLeftMiddle``
+        * ``fullLeftIndex``
+        * ``fullRightIndex``
+        * ``fullRightMiddle``
+        * ``fullRightRing``
 
       groups (:py:class:`str`, optional): Groups the clients belong to. Should
         be one of:
@@ -244,7 +268,13 @@ class Database(bob.db.base.SQLiteDatabase):
         * ``nomRightIndex``
         * ``nomRightMiddle``
         * ``nomRightRing``
-	* ``full``
+	      * ``full``
+        * ``fullLeftRing``
+        * ``fullLeftMiddle``
+        * ``fullLeftIndex``
+        * ``fullRightIndex``
+        * ``fullRightMiddle``
+        * ``fullRightRing``
 
       purposes (:py:class:`str`, :py:class:`list`, optional): One or several
         of:

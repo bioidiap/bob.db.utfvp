@@ -62,7 +62,7 @@ def add_protocols(session, file_list, verbose):
   """Adds protocols"""
 
   # 2. ADDITIONS TO THE SQL DATABASE
-  protocol_list = ['1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing', 'full']
+  protocol_list = ['1vsall', 'nom','nomLeftRing','nomLeftMiddle','nomLeftIndex','nomRightIndex','nomRightMiddle','nomRightRing', 'full', 'fullLeftRing', 'fullLeftMiddle', 'fullLeftIndex', 'fullRightIndex', 'fullRightMiddle', 'fullRightRing']
   for proto in protocol_list:
     p = Protocol(proto)
     # Add protocol
@@ -72,34 +72,34 @@ def add_protocols(session, file_list, verbose):
     session.refresh(p)
 
     if proto == '1vsall':
-      # Helper function
+      # Helper function 
       def isWorldFile(f_file):
-        return f_file.client.subclient_id <= 35 and f_file.finger_id == ((f_file.client.subclient_id-1) % 6) + 1
+        return f_file.client.subclient_id <= 35 and f_file.finger_id == ((f_file.client.subclient_id-1) % 6) + 1 # defines what it means for file to belong to "world" class
 
-      model_dict = {}
-      for f_file in file_list:
-        if not isWorldFile(f_file):
-          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+      model_dict = {} # dictionary of models
+      for f_file in file_list: # for every file in the database
+        if not isWorldFile(f_file): # if the file does not belong to the "world" class, then continue processing it
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)  # the ID of the model as personID_finger_ID_session_ID
           if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
-          if not model_id in model_dict:
-            model = Model(model_id, f_file.client_id, 'dev')
-            p.models.append(model)
+          if not model_id in model_dict:  # if we haven't already stored the model in the model dictionary ...
+            model = Model(model_id, f_file.client_id, 'dev')  # create a model for this particular file
+            p.models.append(model)  # add the model to the list of models for this particular protocol
             session.add(model)
             session.flush()
             session.refresh(model)
             # Append probe files
-            for f_pfile in file_list:
-              if f_pfile.id != f_file.id and not isWorldFile(f_pfile):
-                model.probe_files.append(f_pfile)
+            for f_pfile in file_list: # for every file in the database
+              if f_pfile.id != f_file.id and not isWorldFile(f_pfile):  # if the file is not the same as the current model file and it is not in the "world" group ...
+                model.probe_files.append(f_pfile) # add the file to the list of probe files for this particular model
                 if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
-            model_dict[model_id] = model
+            model_dict[model_id] = model # add this model to the model dictionary, indexed by its model id
           # Append enrollment file
-          model_dict[model_id].enrollment_files.append(f_file)
+          model_dict[model_id].enrollment_files.append(f_file)  # add the enrollment files associated with this model
           if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
           session.flush()
 
         else:
-          p.train_files.append(f_file)
+          p.train_files.append(f_file)  # if the file is part of the "world" group then add it to the training set
           if verbose>1: print("   Adding file ('%s') to protocol purpose ('%s', '%s','%s')..." % (f_file.path, p.name, 'world', 'train'))
 
 
@@ -479,6 +479,181 @@ def add_protocols(session, file_list, verbose):
         if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
         session.flush()
 
+
+    if proto == 'fullLeftRing': # calculate match score between every client (model) and every probe (no training/world set) using only the Left Ring fingers
+      model_dict = {}
+      for f_file in file_list:
+        if f_file.finger_id == 1: # ensures only Left Ring fingers are used
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+          if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+          if not model_id in model_dict:
+            model = Model(model_id, f_file.client_id, 'dev')
+            p.models.append(model)
+            session.add(model)
+            session.flush()
+            session.refresh(model)
+            # Append probe files
+            for f_pfile in file_list:
+              if f_pfile.finger_id == 1:
+                if f_pfile.id != f_file.id:
+                  model.probe_files.append(f_pfile)
+                  if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+              elif f_pfile.finger_id != 1:
+                continue
+            model_dict[model_id] = model
+          # Append enrollment file
+          model_dict[model_id].enrollment_files.append(f_file)
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+          session.flush()
+        elif f_file.session_id != 1:
+          continue
+
+
+    if proto == 'fullLeftMiddle': # calculate match score between every client (model) and every probe (no training/world set) using only the Left Middle fingers
+      model_dict = {}
+      for f_file in file_list:
+        if f_file.finger_id == 2: # ensures only Left Middle fingers are used
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+          if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+          if not model_id in model_dict:
+            model = Model(model_id, f_file.client_id, 'dev')
+            p.models.append(model)
+            session.add(model)
+            session.flush()
+            session.refresh(model)
+            # Append probe files
+            for f_pfile in file_list:
+              if f_pfile.finger_id == 2:
+                if f_pfile.id != f_file.id:
+                  model.probe_files.append(f_pfile)
+                  if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+              elif f_pfile.finger_id != 2:
+                continue
+            model_dict[model_id] = model
+          # Append enrollment file
+          model_dict[model_id].enrollment_files.append(f_file)
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+          session.flush()
+        elif f_file.session_id != 2:
+          continue
+
+
+    if proto == 'fullLeftIndex': # calculate match score between every client (model) and every probe (no training/world set) using only the Left Index fingers
+      model_dict = {}
+      for f_file in file_list:
+        if f_file.finger_id == 3: # ensures only Left Index fingers are used
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+          if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+          if not model_id in model_dict:
+            model = Model(model_id, f_file.client_id, 'dev')
+            p.models.append(model)
+            session.add(model)
+            session.flush()
+            session.refresh(model)
+            # Append probe files
+            for f_pfile in file_list:
+              if f_pfile.finger_id == 3:
+                if f_pfile.id != f_file.id:
+                  model.probe_files.append(f_pfile)
+                  if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+              elif f_pfile.finger_id != 3:
+                continue
+            model_dict[model_id] = model
+          # Append enrollment file
+          model_dict[model_id].enrollment_files.append(f_file)
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+          session.flush()
+        elif f_file.session_id != 3:
+          continue
+
+
+    if proto == 'fullRightIndex': # calculate match score between every client (model) and every probe (no training/world set) using only the Right Index fingers
+      model_dict = {}
+      for f_file in file_list:
+        if f_file.finger_id == 4: # ensures only Right Index fingers are used
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+          if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+          if not model_id in model_dict:
+            model = Model(model_id, f_file.client_id, 'dev')
+            p.models.append(model)
+            session.add(model)
+            session.flush()
+            session.refresh(model)
+            # Append probe files
+            for f_pfile in file_list:
+              if f_pfile.finger_id == 4:
+                if f_pfile.id != f_file.id:
+                  model.probe_files.append(f_pfile)
+                  if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+              elif f_pfile.finger_id != 4:
+                continue
+            model_dict[model_id] = model
+          # Append enrollment file
+          model_dict[model_id].enrollment_files.append(f_file)
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+          session.flush()
+        elif f_file.session_id != 4:
+          continue
+
+
+    if proto == 'fullRightMiddle': # calculate match score between every client (model) and every probe (no training/world set) using only the Right Middle fingers
+      model_dict = {}
+      for f_file in file_list:
+        if f_file.finger_id == 5: # ensures only Right Middle fingers are used
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+          if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+          if not model_id in model_dict:
+            model = Model(model_id, f_file.client_id, 'dev')
+            p.models.append(model)
+            session.add(model)
+            session.flush()
+            session.refresh(model)
+            # Append probe files
+            for f_pfile in file_list:
+              if f_pfile.finger_id == 5:
+                if f_pfile.id != f_file.id:
+                  model.probe_files.append(f_pfile)
+                  if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+              elif f_pfile.finger_id != 5:
+                continue
+            model_dict[model_id] = model
+          # Append enrollment file
+          model_dict[model_id].enrollment_files.append(f_file)
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+          session.flush()
+        elif f_file.session_id != 5:
+          continue
+
+
+    if proto == 'fullRightRing': # calculate match score between every client (model) and every probe (no training/world set) using only the Right Ring fingers
+      model_dict = {}
+      for f_file in file_list:
+        if f_file.finger_id == 6: # ensures only Right Ring fingers are used
+          model_id = "%s_%d" % (f_file.client_id, f_file.session_id)
+          if verbose>1: print("  Adding Model '%s'..." %(model_id, ))
+          if not model_id in model_dict:
+            model = Model(model_id, f_file.client_id, 'dev')
+            p.models.append(model)
+            session.add(model)
+            session.flush()
+            session.refresh(model)
+            # Append probe files
+            for f_pfile in file_list:
+              if f_pfile.finger_id == 6:
+                if f_pfile.id != f_file.id:
+                  model.probe_files.append(f_pfile)
+                  if verbose>1: print("   Adding probe entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_pfile.path, model_id, p.name, 'dev', 'probe'))
+              elif f_pfile.finger_id != 6:
+                continue
+            model_dict[model_id] = model
+          # Append enrollment file
+          model_dict[model_id].enrollment_files.append(f_file)
+          if verbose>1: print("   Adding enrollment entry ('%s') to Model ('%s') for protocol purpose ('%s', '%s','%s')..." % (f_file.path, model_id, p.name, 'dev', 'enroll'))
+          session.flush()
+        elif f_file.session_id != 6:
+          continue
+
+
 def create_tables(args):
   """Creates all necessary tables (only to be used at the first time)"""
 
@@ -523,3 +698,4 @@ def add_command(subparsers):
   parser.add_argument('-D', '--imagedir', metavar='DIR', default='/idiap/resource/database/UTFVP/data', help="Change the relative path to the directory containing the images of the UTFVP database (defaults to %(default)s)")
 
   parser.set_defaults(func=create) #action
+
