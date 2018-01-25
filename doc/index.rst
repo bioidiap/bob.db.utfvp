@@ -7,10 +7,13 @@
  UTFVP Fingervein Database
 ==========================
 
-The `UTFVP Fingervein Database <http://www.sas.ewi.utwente.nl>`_ for finger vein recognition consists of 1300 images from 60 clients.
-This database was produced at the `University of Twente <http://www.utwente.nl/en/>`_, in Nederlands.
+The `UTFVP Fingervein Database <http://www.sas.ewi.utwente.nl>`_ for finger
+vein recognition consists of 1440 images from 60 clients.  This database was
+produced at the `University of Twente <http://www.utwente.nl/en/>`_, in
+Nederlands.
 
-If you use this database in your publication, please cite the following paper on your references:
+If you use this database in your publication, please cite the following paper
+on your references:
 
 .. code-block:: latex
 
@@ -34,6 +37,7 @@ If you use this database in your publication, please cite the following paper on
               year = {2013},
          id_number = {10.1109/ICB.2013.6612966}
     }
+
 
 Documentation
 -------------

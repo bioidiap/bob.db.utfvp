@@ -1,5 +1,5 @@
 .. vim: set fileencoding=utf-8 :
-.. Thu 18 Aug 2016 18:03:33 CEST
+.. Thu 25 Jan 2018 10:56:14 CET
 
 ============
  Python API

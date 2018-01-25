@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # vim: set fileencoding=utf-8 :
 
-"""Bob Database Driver entry-point for the UTFVP
+"""Bob Database Driver entry-point for the UTFVP Fingervein database
 """
 
 import os
 import sys
+import pkg_resources
 from bob.db.base.driver import Interface as BaseInterface
 
 
@@ -15,17 +16,12 @@ def dumplist(args):
   from .query import Database
   db = Database()
 
-  model_ids = None
-  if args.models is not None:
-    if isinstance(args.models, (list, tuple)): model_ids = args.models
-    else: model_ids = (args.models,)
   r = db.objects(
       protocol=args.protocol,
-      purposes=args.purpose,
-      model_ids=model_ids,
       groups=args.group,
-      classes=args.sclass
-  )
+      purposes=args.purpose,
+      model_ids=args.models,
+      )
 
   output = sys.stdout
   if args.selftest:
@@ -72,28 +68,33 @@ def checkfiles(args):
 
 class Interface(BaseInterface):
 
+
   def name(self):
     return 'utfvp'
 
+
   def version(self):
-    import pkg_resources  # part of setuptools
     return pkg_resources.require('bob.db.%s' % self.name())[0].version
 
-  def files(self):
 
-    from pkg_resources import resource_filename
-    raw_files = ('db.sql3',)
-    return [resource_filename(__name__, k) for k in raw_files]
+  def files(self):
+    basedir = pkg_resources.resource_filename(__name__, '')
+    filelist = os.path.join(basedir, 'files.txt')
+    with open(filelist, 'rt') as f:
+      return [os.path.join(basedir, k.strip()) for k in \
+          f.readlines() if k.strip()]
+
 
   def type(self):
     return 'sqlite'
+
 
   def add_commands(self, parser):
 
     from . import __doc__ as docs
 
     subparsers = self.setup_parser(parser,
-        "UTFVP database", docs)
+        "UTFVP Fingervein database", docs)
 
     # example: get the "create" action from a submodule
     from .create import add_command as create_command
@@ -109,7 +110,7 @@ class Interface(BaseInterface):
     parser.add_argument('-e', '--extension', default='', help="if given, this extension will be appended to every entry returned.")
     parser.add_argument('-p', '--protocol', help="if given, limits the dump to a particular subset of the data that corresponds to the given protocol.", choices=db.protocol_names() if db.is_valid() else ())
     parser.add_argument('-u', '--purpose', help="if given, this value will limit the output files to those designed for the given purposes.", choices=db.purposes() if db.is_valid() else ())
-    parser.add_argument('-m', '--models', type=str, help="if given, limits the dump to a particular model", choices=db.model_ids() if db.is_valid() else ())
+    parser.add_argument('-m', '--models', type=str, help="if given, limits the dump to a particular model")
     parser.add_argument('-g', '--group', help="if given, this value will limit the output files to those belonging to a particular protocolar group.", choices=db.groups() if db.is_valid() else ())
     parser.add_argument('-c', '--class', dest='sclass', help="if given, this value will limit the output files to those belonging to the given classes.", choices=('client', 'impostor'))
     parser.add_argument('--self-test', dest="selftest", action='store_true', help=argparse.SUPPRESS)
@@ -118,6 +119,6 @@ class Interface(BaseInterface):
     # the "checkfiles" action
     parser = subparsers.add_parser('checkfiles', help=checkfiles.__doc__)
     parser.add_argument('-d', '--directory', default='', help="if given, this path will be prepended to every entry returned.")
-    parser.add_argument('-e', '--extension', default='', help="if given, this extension will be appended to every entry returned.")
+    parser.add_argument('-e', '--extension', default='.png', help="if given, this extension will be appended to every entry returned.")
     parser.add_argument('--self-test', dest="selftest", action='store_true', help=argparse.SUPPRESS)
     parser.set_defaults(func=checkfiles) #action
